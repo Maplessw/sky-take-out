@@ -8,9 +8,12 @@ import com.sky.entity.Category;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
+import org.springframework.stereotype.Repository;
+
 import java.util.List;
 
 @Mapper
+@Repository
 public interface CategoryMapper {
 
     /**
