@@ -2,6 +2,7 @@ package com.sky.controller.admin;
 
 import com.sky.dto.DishDTO;
 import com.sky.dto.DishPageQueryDTO;
+import com.sky.entity.Dish;
 import com.sky.result.PageResult;
 import com.sky.result.Result;
 import com.sky.service.DishService;
@@ -101,10 +102,25 @@ public class DishController {
      * @return
      */
     @PostMapping("/status/{status}")
-    @ApiOperation("启用禁用菜品")
+    @ApiOperation("启售禁售菜品")
     public Result startOrStop(@PathVariable int status,Long id){
-        log.info("启用禁用菜品: {},{}",status,id);
+        log.info("启售禁售菜品: {},{}",status,id);
         dishService.startOrStop(status,id);
         return Result.success();
     }
+
+    /**
+     * 根据分类id和菜品名称查询菜品
+     * @param categoryId
+     * @param name
+     * @return
+     */
+    @GetMapping("/list")
+    @ApiOperation("根据分类id和菜品名称查询菜品")
+    public Result<List<Dish>> getByCategoryId(Long categoryId,String name){
+        log.info("根据分类id查询菜品 : {},{}",categoryId,name);
+        List<Dish> dishList = dishService.getByCategoryIdAndName(categoryId,name);
+        return Result.success(dishList);
+    }
+
 }

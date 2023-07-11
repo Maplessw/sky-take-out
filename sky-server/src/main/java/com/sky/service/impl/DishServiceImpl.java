@@ -13,6 +13,7 @@ import com.sky.exception.DeletionNotAllowedException;
 import com.sky.mapper.DishFlavorMapper;
 import com.sky.mapper.DishMapper;
 import com.sky.mapper.SetmealDishMapper;
+import com.sky.mapper.SetmealMapper;
 import com.sky.result.PageResult;
 import com.sky.service.DishService;
 import com.sky.vo.DishVO;
@@ -43,6 +44,9 @@ public class DishServiceImpl implements DishService {
 
     @Autowired
     private SetmealDishMapper setmealDishMapper;
+
+    @Autowired
+    private SetmealMapper setmealMapper;
 
     /**
      * 新增菜品和对应的口味
@@ -153,24 +157,34 @@ public class DishServiceImpl implements DishService {
     }
 
     /**
-     * 启用禁用菜品
+     * 启售禁售菜品
      * @param status
      * @param id
      */
     public void startOrStop(int status, Long id) {
-        //如果禁用菜品，则连包含菜品的套餐一起禁用
-        if(status == 0){
+        //如果禁售菜品，则连包含菜品的套餐一起禁售
+        if(status == StatusConstant.DISABLE){
             List<Long> ids = new ArrayList<>();
             ids.add(id);
             List<Long> setmealIds = setmealDishMapper.getSetmealIdsByDishIds(ids);
             for (Long setmealId : setmealIds) {
                 Setmeal setmeal = Setmeal.builder().status(status).id(setmealId).build();
-                setmealDishMapper.update(setmeal);
+                setmealMapper.update(setmeal);
             }
         }
 
         //更新菜品的状态信息
         Dish dish = Dish.builder().status(status).id(id).build();
         dishMapper.update(dish);
+    }
+
+    /**
+     * 根据分类id查询菜品
+     * @param categoryId
+     * @return
+     */
+    public List<Dish> getByCategoryIdAndName(Long categoryId,String name) {
+        List<Dish> dishList = dishMapper.getByCategoryIdAndName(categoryId,name);
+        return dishList;
     }
 }
