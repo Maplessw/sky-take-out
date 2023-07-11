@@ -8,6 +8,7 @@ import com.sky.dto.DishDTO;
 import com.sky.dto.DishPageQueryDTO;
 import com.sky.entity.Dish;
 import com.sky.entity.DishFlavor;
+import com.sky.entity.Setmeal;
 import com.sky.exception.DeletionNotAllowedException;
 import com.sky.mapper.DishFlavorMapper;
 import com.sky.mapper.DishMapper;
@@ -21,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -148,5 +150,27 @@ public class DishServiceImpl implements DishService {
             //向口味表插入n条数据
             dishFlavorMapper.insertBatch(flavors);
         }
+    }
+
+    /**
+     * 启用禁用菜品
+     * @param status
+     * @param id
+     */
+    public void startOrStop(int status, Long id) {
+        //如果禁用菜品，则连包含菜品的套餐一起禁用
+        if(status == 0){
+            List<Long> ids = new ArrayList<>();
+            ids.add(id);
+            List<Long> setmealIds = setmealDishMapper.getSetmealIdsByDishIds(ids);
+            for (Long setmealId : setmealIds) {
+                Setmeal setmeal = Setmeal.builder().status(status).id(setmealId).build();
+                setmealDishMapper.update(setmeal);
+            }
+        }
+
+        //更新菜品的状态信息
+        Dish dish = Dish.builder().status(status).id(id).build();
+        dishMapper.update(dish);
     }
 }
