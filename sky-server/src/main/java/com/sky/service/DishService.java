@@ -4,6 +4,7 @@ import com.sky.dto.DishDTO;
 import com.sky.dto.DishPageQueryDTO;
 import com.sky.result.PageResult;
 import com.sky.result.Result;
+import com.sky.vo.DishVO;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
@@ -30,4 +31,16 @@ public interface DishService {
      * @return
      */
     void deleteBatch(List<Long> ids);
+
+    /**
+     * 根据id查询菜品及口味数据
+     * @return
+     */
+    DishVO getByIdWithFlavor(Long id);
+
+    /**
+     * 根据Id修改菜品基本信息和对应的口味信息
+     * @param dishDTO
+     */
+    void updateWithFlavor(DishDTO dishDTO);
 }
