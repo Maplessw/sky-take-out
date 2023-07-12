@@ -135,6 +135,7 @@ public class DishServiceImpl implements DishService {
      * 根据Id修改菜品基本信息和对应的口味信息
      * @param dishDTO
      */
+    @Transactional
     public void updateWithFlavor(DishDTO dishDTO) {
         Dish dish = new Dish();
         BeanUtils.copyProperties(dishDTO,dish);
@@ -161,6 +162,7 @@ public class DishServiceImpl implements DishService {
      * @param status
      * @param id
      */
+    @Transactional
     public void startOrStop(int status, Long id) {
         //如果禁售菜品，则连包含菜品的套餐一起禁售
         if(status == StatusConstant.DISABLE){

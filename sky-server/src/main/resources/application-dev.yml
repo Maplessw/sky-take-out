@@ -11,3 +11,8 @@ sky:
     access-key-secret: UbXh73fwUrNXN4CIet4hBxW1pOpBgf
     access-key-id: LTAI5tHPGGCQChdiF1GpGLQ7
     bucket-name: mape-take-out
+  redis:
+    host: localhost
+    port: 6379
+    password: ssw200212
+    database: 10

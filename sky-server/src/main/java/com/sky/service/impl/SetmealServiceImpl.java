@@ -21,6 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,6 +49,7 @@ public class SetmealServiceImpl implements SetmealService {
      * 新增套餐
      * @param setmealDTO
      */
+    @Transactional
     public void saveWithSetmealDish(SetmealDTO setmealDTO) {
         //新增套餐基本信息
         Setmeal setmeal = new Setmeal();
@@ -79,6 +81,7 @@ public class SetmealServiceImpl implements SetmealService {
      * 套餐批量删除
      * @param ids
      */
+    @Transactional
     public void deleteBatch(List<Long> ids) {
         // 判断套餐是否能够删除--是否存在起售中的套餐??
         for (Long id : ids) {
@@ -101,6 +104,7 @@ public class SetmealServiceImpl implements SetmealService {
      * 修改套餐
      * @param setmealDTO
      */
+    @Transactional
     public void updateWithSetmealDish(SetmealDTO setmealDTO) {
         //套餐数据准备
         Setmeal setmeal = new Setmeal();
