@@ -74,10 +74,10 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
                 shoppingCart.setImage(setmeal.getImage());
                 shoppingCart.setAmount(setmeal.getPrice());
             }
+            shoppingCart.setNumber(1);
+            shoppingCart.setCreateTime(LocalDateTime.now());
+            shoppingCartMapper.insert(shoppingCart);
         }
-        shoppingCart.setNumber(1);
-        shoppingCart.setCreateTime(LocalDateTime.now());
-        shoppingCartMapper.insert(shoppingCart);
     }
 
     /**
@@ -99,5 +99,32 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         //获取用户id
         Long userId = BaseContext.getCurrentId();
         shoppingCartMapper.deleteByUserId(userId);
+    }
+
+    /**
+     * 删除购物车中一个商品
+     * @param shoppingCartDTO
+     */
+    public void subShoppingCart(ShoppingCartDTO shoppingCartDTO) {
+        //判断当前加入到购物车中的商品是否已经存在了
+        ShoppingCart shoppingCart = new ShoppingCart();
+        BeanUtils.copyProperties(shoppingCartDTO,shoppingCart);
+        Long userId = BaseContext.getCurrentId();
+        shoppingCart.setUserId(userId);
+
+        List<ShoppingCart> list = shoppingCartMapper.list(shoppingCart);
+        ShoppingCart cart = list.get(0);
+
+        if(list != null && list.size() > 0){
+            if(cart.getNumber() > 1){
+                //如果商品数量 > 1了，只需要将数量-1,再更新即可
+                cart.setNumber(cart.getNumber() - 1);
+                shoppingCartMapper.updateNumberById(cart);
+            }
+            else{
+                //如果商品数量等于1 直接删除商品数据
+                shoppingCartMapper.delete(shoppingCart);
+            }
+        }
     }
 }
