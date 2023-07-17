@@ -6,6 +6,7 @@ import com.sky.dto.OrdersPageQueryDTO;
 import com.sky.entity.Orders;
 import com.sky.vo.OrderVO;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
 
@@ -69,7 +70,7 @@ public interface OrderMapper {
      * @param map
      * @return
      */
-    Double sumByMap(HashMap map);
+    Double sumByMap(Map map);
 
     /**
      * 根据动态条件统计订单数
@@ -84,5 +85,5 @@ public interface OrderMapper {
      * @param end
      * @return
      */
-    List<GoodsSalesDTO> getSalesTop10(LocalDateTime begin,LocalDateTime end);
+    List<GoodsSalesDTO> getSalesTop10(@Param("begin") LocalDateTime begin,@Param("end") LocalDateTime end);
 }
